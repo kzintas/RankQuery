@@ -1,0 +1,3 @@
+https://stackoverflow.com/questions/27367487/how-do-i-can-a-string-of-binary-digits-to-a-boolean-vector-in-c/27367542
+
+https://stackoverflow.com/questions/9791239/can-we-alias-a-class-name-the-way-we-do-in-namespaces
