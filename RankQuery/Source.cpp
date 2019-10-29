@@ -84,29 +84,33 @@ public:
 
 		//cout << b.size() << "\t" << boundary_sb << "\t" << number_sb << "\t"<<boundary_b << "\t" << number_b<<  "\n";
 
-		//int count = 0;	//Redundant var, keeping track
+		int count = 0;	//Redundant var, keeping track
 		R_s.push_back(0);	//First value will always be zero
 
 		//Superblock calculations
-		for (int i = 0; i < (number_sb - 1); i++) {	//Loop over number of super blocks
+		for (int i = 0; i < (number_sb - 1) ; i++) {	//Loop over number of super blocks
 			int sum = 0;
-			for (int j = 0; j < boundary_sb; j++) {	//Loop over the elements
+			for (int j = 0; (j < boundary_sb && count < size); j++, count++) {	//Loop over the elements
 				sum += b[boundary_sb * i + j];
 				//cout << j << "\n";
-				//count++;
+				
 			}
 			//cout << sum<< "\t "<< "valuestored"<<"\n";
 			R_s.push_back(sum);
 		}
 
 		//Block calculations
+		count = 0;
+		
+		//R_b.push_back(block(R_s.at(0), 0));
+
 		for (int k = 0; k < R_s.size(); k++) {
 			int sum2 = 0;
-			for (int l = 0; l < (boundary_sb - boundary_b + 1); l += boundary_b) {
+			for (int l = 0; l < (boundary_sb - boundary_b + 1) ; l += boundary_b) {
 				block temp_b(R_s.at(k), sum2);
 				R_b.push_back(temp_b);
-
-				for (int n = 0; n < boundary_b; n++) {
+				
+				for (int n = 0; n < boundary_b && count < size; n++ , count++) {
 					//cout << k * boundary_sb + l + n << "\t"<<l<<"\t"<<n<<"\n";
 					sum2 += b[k * boundary_sb + l + n];
 				}
@@ -308,7 +312,7 @@ public:
 int main(void) {
 	//std::string bits("10101011101011111000");
 
-	wavelet_tree wt("helloworld", NULL);
+	wavelet_tree wt("helloworldo", NULL);
 	/*
 	std::string bits("1001011100001010");
 
