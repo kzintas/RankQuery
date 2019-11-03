@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <numeric>
 #include <set>
+#include <fstream>
 
 using namespace std;
 
@@ -216,9 +217,12 @@ public:
 	uint64_t rank0(uint64_t i) {
 		return i - rank1(i);
 	}
-	//: Returns the number of 0s in the underlying bit - vector up to position i(inclusive) — simply i - rank1(i).
+	//: Returns the number of 0s in the underlying bit - vector up to position i(inclusive) ï¿½ simply i - rank1(i).
 
 	uint64_t overhead() {
+
+		int size= sizeof(b)+sizeof(R_s)*number_of_superblocks*8+sizeof(R_b)*number_of_blocks+sizeof(R_p)*8;
+		cout<<"\n"<<size<<"\n";
 		cout << sizeof(b) << "\t" << sizeof(R_b) << "\t" << sizeof(R_s);
 		return sizeof(b);
 	}
@@ -383,14 +387,40 @@ public:
 	}
 };
 
+
 int main(void) {
+	string bits;
+  	ifstream myfile ("input.txt");
+  	if (myfile.is_open())
+  	{
+    	
+		getline (myfile,bits);
+		//cout << bits << '\n';
+
+		bit_vector b;
+		cout<<bits.length()<<"Hello"<<endl;
+
+		for (auto a : bits)
+			b.push_back(a == '1');
+		//cout<<b.at(1000);
+		rank_support r1(b);
+		rank_support* r = &r1;
+		cout << "\n" << r1.rank1(13)<<endl;
+
+
+	
+    	myfile.close();
+  	}
+
+  	else cout << "Unable to open file"; 
+	/*
 	//std::string bits("10101011101011111000");
 
-	wavelet_tree wt("helloworldo", NULL);
+	//wavelet_tree wt("helloworldo", NULL);
 
 	//cout << wt.rank(6, 'o');
-	cout << wt.select('l', 3);
-	/*
+	//cout << wt.select('l', 3);
+	
 	std::string bits("1001011100001010");
 
 	//bit_vector b(bits);
@@ -409,7 +439,7 @@ int main(void) {
 	cout << "\n" << s1.select0(7);
 	cout << "\n" << r1.rank1(13);
 
-	//r1.overhead();
+	r1.overhead();
 	/*
 	std::vector<bool > bit_vector;
 
