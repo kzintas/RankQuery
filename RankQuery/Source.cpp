@@ -221,10 +221,10 @@ public:
 
 	uint64_t overhead() {
 
-		int size= sizeof(b)+sizeof(R_s)*number_of_superblocks*8+sizeof(R_b)*number_of_blocks+sizeof(R_p)*8;
+		int size= sizeof(b)*b.size()+sizeof(R_s)*R_s.size()*8+sizeof(R_b)*R_b.size()*8+sizeof(R_p)*8+pow(2.0, block_size)*block_size*sizeof(int)*8;
 		cout<<"\n"<<size<<"\n";
 		cout << sizeof(b) << "\t" << sizeof(R_b) << "\t" << sizeof(R_s);
-		return sizeof(b);
+		return size;
 	}
 	//: Returns the size of the rank data structure(in bits) that is required to support constant - time rank on the current bitvector.
 
@@ -294,6 +294,13 @@ public:
 	}// : Returns the the position, in the underlying bit - vector, of the ith 0.
 
 	uint64_t overhead() {
+		r1->overhead();
+
+		/*int size= sizeof(r1->b)+sizeof(r1->R_s)*r1->R_s.size()*8+sizeof(R_b)*R_b.size()*8+sizeof(R_p)*8+pow(2.0, block_size)*block_size*sizeof(int)*8;
+		cout<<"\n"<<size<<"\n";
+		cout << sizeof(b) << "\t" << sizeof(R_b) << "\t" << sizeof(R_s);
+		return size;
+		*/
 	}// : Returns the size of the select data structure(in bits) that is required to support log - time select on the current bitvector(how does this relate to the size of the rank data structure built above).
 };
 
@@ -390,11 +397,12 @@ public:
 
 int main(void) {
 	string bits;
-  	ifstream myfile ("input.txt");
-  	if (myfile.is_open())
+  	ifstream infile ("input.txt");
+	ofstream outfile ("output.txt");
+  	if (infile.is_open())
   	{
     	
-		getline (myfile,bits);
+		getline (infile,bits);
 		//cout << bits << '\n';
 
 		bit_vector b;
@@ -405,15 +413,30 @@ int main(void) {
 		//cout<<b.at(1000);
 		rank_support r1(b);
 		rank_support* r = &r1;
-		cout << "\n" << r1.rank1(13)<<endl;
+		
+
+		select_support s1(r);
+
+	
+		if (outfile.is_open())
+		{
+			outfile << "\n" << s1.select0(7777);
+			outfile << "\n" << r1.rank1(1333);
+			outfile<<"\n"<<r1.overhead();
+
+			outfile.close();
+		}
+		else cout << "Unable to open file";
+
 
 
 	
-    	myfile.close();
+    	outfile.close();
   	}
 
   	else cout << "Unable to open file"; 
-	/*
+	  
+  	/*
 	//std::string bits("10101011101011111000");
 
 	//wavelet_tree wt("helloworldo", NULL);
