@@ -251,7 +251,7 @@ public:
 		int rank_val = 0;
 		int middle;//middle
 		bool flag = false;
-		while (left < right) {
+		while (left <= right) {
 			middle = (left + right) / 2;
 			rank_val = r1->rank1(middle);
 			if (rank_val > i) right = middle - 1;
@@ -266,6 +266,7 @@ public:
 		while (r1->b[middle - 1] == 0) {
 			middle -= 1;
 		}
+		//cout<<middle<<"";
 		return middle;
 	}// : Returns the position, in the underlying bit - vector, of the ith 1.
 
@@ -275,7 +276,7 @@ public:
 		int rank_val = 0;
 		int middle;//middle
 		bool flag = false;
-		while (left < right) {
+		while (left <= right) {
 			middle = (left + right) / 2;
 			rank_val = r1->rank0(middle);
 			if (rank_val > i) right = middle - 1;
@@ -290,6 +291,7 @@ public:
 		while (r1->b[middle - 1] == 1) {
 			middle -= 1;
 		}
+		//cout<<middle<<"\n";
 		return middle;
 	}// : Returns the the position, in the underlying bit - vector, of the ith 0.
 
@@ -342,18 +344,18 @@ public:
 		s1 = new select_support(r1);
 		if (alphabet.size() == 1) return;
 		if (!temp_left.empty()) {
-			cout << temp_left << "\ttemp_left\n";
+			//cout << temp_left << "\ttemp_left\n";
 			Left = new wavelet_tree(temp_left, this);
 		}
 		if (!temp_right.empty()) {
-			cout << temp_right << "\ttemp right\n";
+			//cout << temp_right << "\ttemp right\n";
 			Right = new wavelet_tree(temp_right, this);
 		}
 	}
 
 	int rank(char c, int index) {
 		while (this->Left != NULL && this->Right != NULL) {
-			cout << index << "\n";
+			//cout << index << "\n";
 			if (c <= middle) {
 				index = this->r1->rank0(index);
 				return this->Left->rank(c, index);
@@ -373,7 +375,7 @@ public:
 		int index;
 		wavelet_tree* temp=this;
 		while (alphabet.size()!=1) {
-			cout << occurrence << "\n";
+			//cout << occurrence << "\n";
 			if (c <= middle) {
 				occurrence = this->Left->select(c, occurrence);
 				return this->s1->select0(occurrence);
@@ -395,6 +397,44 @@ public:
 };
 
 
+int main(int argc, char** argv) 
+{ 
+	if(argc<3){
+		cout<< "Not al parameters given"<<endl;
+		return 1;
+	}
+
+    std::string arg = argv[1];
+	if(arg=="build") {
+		//$wt build <input string> <output file>
+		std::string input = argv[2];
+		std::string output = argv[3];
+
+		ifstream infile (input);
+		ofstream outfile (output);
+
+		string bits;
+  	
+		if (infile.is_open())
+		{
+			
+			getline (infile,bits);
+			cout << bits << '\n';
+			wavelet_tree wt(bits, NULL);
+
+			cout << wt.rank('l', 6)<<"\n";
+			cout << wt.select('l', 3)<<"\n";
+		}
+
+  	
+
+
+	}
+    
+    return 0; 
+} 
+
+/*
 int main(void) {
 	string bits;
   	ifstream infile ("input.txt");
@@ -470,7 +510,7 @@ int main(void) {
 	std::vector<bool >::reference ref1 = bit_vector.at(0);
 	cout << ref1 << endl; // ref1 implicitly cast to bool
 
-	*/
+	
 
 	return 0;
-}
+}*/
