@@ -394,6 +394,21 @@ public:
 		return occurrence;
 		
 	}
+	/*
+
+		istream& operator>>(istream& is, Entry2& en)
+		{
+			is >> en.original;
+			is >> en.currency;
+			return is;
+		}
+
+		ostream& operator<<(ostream& os, const Entry2& en)
+		{
+			os << en.original << " " << en.currency;
+			return os;
+		}
+		*/
 };
 
 
@@ -426,7 +441,7 @@ int main(int argc, char** argv)
 			cout << wt.select('l', 3)<<"\n";
 		}
 
-  	
+  	 
 
 
 	}
