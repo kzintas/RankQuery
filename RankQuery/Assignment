@@ -1,0 +1,18 @@
+Your final implementation should be a command-line program with the following interace (below, $ is the command-line prompt and the name of the program is wt).
+
+    Build a wavelet tree from a string containing an input text. This command reads the string in <input file>, constructs the wavelet tree, and saves the resulting structure to the file <output file>. The program should also write two lines to standard out; the first line should contain the number of distinct input characters in the <input string> file (i.e. the size of the alphabet of the string the tree is constructed over) and the second line should contain the number of characters in the input string. The command should be executed as follows:
+
+    $wt build <input string> <output file>
+
+    Load a wavelet tree from file, and issue a series of access queries on the indices contained in another file. Below, <saved wt> is the file saved as <output file> above, and <access indices> is a file containing a newline-separated list of indices (0-based) to access. The program should output the characters (one per-line) corresponding to each index in the file <access indices> to standard out:
+
+    $wt access <saved wt> <access indices>
+
+    Load a wavelet tree from file and issue a series of rank queries on the contents of another file. Below, <saved wt> is the file saved as <output file> from the construction command above, and <rank queries> is a file containing a newline-separated list of rank queries to issue. Each rank query is of the format <c>\t<i>, where <c> is some character from the alphabet of the original string, <i> is some index and \t is the tab character. The program should output the answers to the rank queries (one per-line) corresponding to each query in the file <rank queries> to standard out:
+
+    $wt rank <saved wt> <access indices>
+
+    Load a wavelet tree from file and issue a series of rank queries on the contents of another file. Below, <saved wt> is the file saved as <output file> from the construction command above, and <select queries> is a file containing a newline-separated list of select queries to issue. Each select query is of the format <c>\t<i>, where <c> is some character from the alphabet of the original string, <i> is the occurrence of the character <c> for one wishes to know the index (again, \t is the tab character). The program should output the answers to the select queries (one per-line) corresponding to each query in the file <select queries> to standard out:
+
+    $wt select <saved wt> <access indices>
+
