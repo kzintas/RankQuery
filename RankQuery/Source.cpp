@@ -12,7 +12,6 @@ using namespace std;
 
 typedef std::vector<bool> bit_vector;
 
-//typedef std::bitset<200> bit_vector;
 
 class block;
 class superblock;
@@ -37,15 +36,13 @@ public:
 	int value;
 	superblock S_b;
 	block(superblock& S, int a = 0) {
-		//this->S = S;
 		value = a;
 		S_b = S;
 	}
 
 	block(int a = 0) {
-		//this->S = S;
 		value = a;
-		//S_b = S;
+		
 	}
 	void set_val(int a) {
 		value = a;
@@ -78,10 +75,7 @@ public:
 			superblock_size = ceil(pow(log2(b.size()), 2.0) / 2.0);	// Number of elements to be summed per superblock
 
 			number_of_superblocks = ceil((double)b.size() / superblock_size);		//Number of superblocks
-			//int count_sb = size_sb / superblock_size;
-
-			//cout <<b.size()<<"\t"<< size_sb << "\t"<< superblock_size <<"\n";
-
+			
 			//Calculation for Blocks inside each superblock
 			block_size = ceil(log2(b.size()) / 2.0); // Number of elements to be summed up per block
 			number_of_blocks = ceil((double)superblock_size / block_size); //Number of blocks per superblock
@@ -90,8 +84,7 @@ public:
 			superblock_size = 1;
 			block_size = 1;
 		}
-		//cout << b.size() << "\t" << superblock_size << "\t" << number_of_superblocks << "\t"<<block_size << "\t" << number_of_blocks<<  "\n";
-
+		
 		int count = 0;	//Redundant var, keeping track
 		R_s.push_back(0);	//First value will always be zero
 
@@ -100,16 +93,16 @@ public:
 			int sum = 0;
 			for (int j = 0; (j < superblock_size && count < size); j++, count++) {	//Loop over the elements
 				sum += b[superblock_size * i + j];
-				//cout << j << "\n";
+		
 			}
-			//cout << sum<< "\t "<< "valuestored"<<"\n";
+		
 			R_s.push_back(sum);
 		}
 
 		//Block calculations
 		count = 0;
 		int scount = 0;
-		//R_b.push_back(block(R_s.at(0), 0));
+		
 		for (int k = 0; k < R_s.size(); k++) {
 			int sum2 = 0;
 			scount = 0;
@@ -118,29 +111,16 @@ public:
 				R_b.push_back(temp_b);
 
 				for (int n = 0; n < block_size && count < size && scount < superblock_size; n++, count++) {
-					//cout << k * superblock_size + l + n << "\t"<<l<<"\t"<<n<<"\n";
+					
 					sum2 += b[k * superblock_size + l * block_size + n];
 					scount++;
 				}
-				//cout << sum2;
-			}
+				
+							}
 		}
 
-		/*
-		for (int k = 0; k < R_s.size(); k++) {
-			int sum2 = 0;
-			for (int l = 0; l < (superblock_size - block_size + 1) ; l += block_size) {
-				block temp_b(R_s.at(k), sum2);
-				R_b.push_back(temp_b);
-
-				for (int n = 0; n < block_size && count < size; n++ , count++) {
-					//cout << k * superblock_size + l + n << "\t"<<l<<"\t"<<n<<"\n";
-					sum2 += b[k * superblock_size + l + n];
-				}
-				//cout << sum2;
-			}
-		}
-		*/
+	
+	
 		//In block Calculations
 		int combinations = pow(2.0, block_size); //Number of possible calculations
 		R_p = new int* [combinations];
@@ -158,20 +138,24 @@ public:
 			v = m & (1 << (block_size - 1));
 			R_p[m][0] = v;
 
-			//cout << R_p[m][0] << "\t";
+			
 			for (int n = 1; n < block_size; n++) {
 				v = m & (1 << (block_size - n - 1));
 
 				R_p[m][n] = R_p[m][n - 1] + v;
-				//cout << R_p[m][n]<<"\t";
+				
+				
 			}
-			//cout << "\n";
+			
+			
 		}
 
-		//cout << b.size()<< "\t"<<log2(b.size())<<"\t"<<ceil(log2(b.size()));
+		
 	}
 
 	uint64_t rank1(uint64_t i) {
+		//: Returns the number of 1s in the underlying bit - vector up to position i(inclusive).
+
 		i -= 1;
 		int superblock_index = floor(i / superblock_size);
 		int block_index = floor((i - superblock_index * superblock_size) / block_size);
@@ -188,10 +172,8 @@ public:
 		vector<bool>::const_iterator last = b.begin() + block_end;
 
 		vector<bool> newVec(first, last);
-		//oo = std::vector(b.begin () + 5, b.begin () + 7);
-		//auto p = newVec.begin()._Myptr;
-		//cout << *p << endl;
-
+		
+		
 		i = accumulate(newVec.begin(), newVec.end(), 0, [](int x, int y) { return (x << 1) + y; });
 
 		//OPTION-1 Use STRING
@@ -203,34 +185,28 @@ public:
 
 		int result = std::stoi(s,0,2);
 		*/
-		// cout << this->R_s[superblock_index].value << "\t" << this->R_b[block_index].value << "\t" << this->R_p[result][index_entry_in_block] << "n";
-
+		
+		
 		return this->R_s[superblock_index].value + this->R_b[number_of_blocks * superblock_index + block_index].value + this->R_p[i][index_entry_in_block];
 	}
-	//: Returns the number of 1s in the underlying bit - vector up to position i(inclusive).
-
+	
 	uint64_t rank0(uint64_t i) {
+		//: Returns the number of 0s in the underlying bit - vector up to position i(inclusive) � simply i - rank1(i).
+
 		return i - rank1(i);
 	}
-	//: Returns the number of 0s in the underlying bit - vector up to position i(inclusive) � simply i - rank1(i).
-
+	
 	uint64_t overhead() {
+		//: Returns the size of the rank data structure(in bits) that is required to support constant - time rank on the current bitvector.
+
 		int size = sizeof(b) * b.size() + sizeof(R_s) * R_s.size() * 8 + sizeof(R_b) * R_b.size() * 8 + sizeof(R_p) * 8 + pow(2.0, block_size) * block_size * sizeof(int) * 8;
 		cout << "\n" << size << "\n";
 		cout << sizeof(b) << "\t" << sizeof(R_b) << "\t" << sizeof(R_s);
 		return size;
 	}
-	//: Returns the size of the rank data structure(in bits) that is required to support constant - time rank on the current bitvector.
-
-	/*
-	uint64_t rank1_for_select(uint64_t i) {
-		i -= 1;
-		int superblock_index = floor(i / superblock_size);
-		int block_index = floor(i / block_size);
-
-		return this->R_s[superblock_index].value + this->R_b[block_index].value ;
-	}
-	*/
+	
+	
+	
 };
 
 class select_support {
@@ -240,6 +216,8 @@ public:
 		this->r1 = R;
 	}
 	uint64_t select1(uint64_t i) {
+		// : Returns the position, in the underlying bit - vector, of the ith 1.
+
 		int left = 1;
 		int right = r1->size;
 		int rank_val = 0;
@@ -261,9 +239,11 @@ public:
 			middle -= 1;
 		}
 		return middle;
-	}// : Returns the position, in the underlying bit - vector, of the ith 1.
+	}
 
 	uint64_t select0(uint64_t i) {
+		// : Returns the the position, in the underlying bit - vector, of the ith 0.
+
 		int left = 1;
 		int right = r1->size;
 		int rank_val = 0;
@@ -285,17 +265,13 @@ public:
 			middle -= 1;
 		}
 		return middle;
-	}// : Returns the the position, in the underlying bit - vector, of the ith 0.
-
+	}
 	uint64_t overhead() {
+		// : Returns the size of the select data structure(in bits) that is required to support log - time select on the current bitvector(how does this relate to the size of the rank data structure built above).
 		r1->overhead();
 
-		/*int size= sizeof(r1->b)+sizeof(r1->R_s)*r1->R_s.size()*8+sizeof(R_b)*R_b.size()*8+sizeof(R_p)*8+pow(2.0, block_size)*block_size*sizeof(int)*8;
-		cout<<"\n"<<size<<"\n";
-		cout << sizeof(b) << "\t" << sizeof(R_b) << "\t" << sizeof(R_s);
-		return size;
-		*/
-	}// : Returns the size of the select data structure(in bits) that is required to support log - time select on the current bitvector(how does this relate to the size of the rank data structure built above).
+	
+	}
 };
 
 class wavelet_tree {
@@ -306,22 +282,19 @@ public:
 	bit_vector B;
 	wavelet_tree* Right;
 	wavelet_tree* Left;
-	//wavelet_tree* Parent;
-
+	
 	rank_support* r1;
 	select_support* s1;
 
 	wavelet_tree(string str) {
-		//Parent = p;
-
+	
 		string temp_left = "";
 		string temp_right = "";
 		alphabet.insert(str.begin(), str.end());
 
-		//cout << alphabet.size();
-
+	
 		middle = ((int)*alphabet.begin() + *alphabet.rbegin()) / 2.0;
-		//cout << middle;
+		
 		for (auto a : str) {
 			if (a <= middle) {
 				B.push_back(0);
@@ -336,17 +309,17 @@ public:
 		s1 = new select_support(r1);
 		if (alphabet.size() == 1) return;
 		if (!temp_left.empty()) {
-			cout << temp_left << "\ttemp_left\n";
+			//cout << temp_left << "\ttemp_left\n";
 			Left = new wavelet_tree(temp_left);
 		}
 		if (!temp_right.empty()) {
-			cout << temp_right << "\ttemp right\n";
+			//cout << temp_right << "\ttemp right\n";
 			Right = new wavelet_tree(temp_right);
 		}
 	}
 
 	wavelet_tree(string str, int offset) {
-		//int i = 0;
+		
 		if (str.substr(offset, 10) == "{alphabet:") {
 
 			offset += 10;
@@ -357,7 +330,7 @@ public:
 			}
 			offset++;
 		}
-		//cout << "\nXYZZ" << str.substr(i + 1, 5);
+		
 		if (str.substr(offset , 5) == "bits:") {
 			offset += 5;
 			while (str.at(offset) != ';') {
@@ -391,7 +364,7 @@ public:
 		}
 			
 		
-		//while (str.at(offset) != '}') offset++;
+		
 		if (str.at(offset) == '}') {
 			offset++; 
 			return; 
@@ -399,7 +372,7 @@ public:
 
 		if (str.substr(offset , 6) == "Right:") {
 			offset += 7;
-			//cout << "HEre";
+			
 			this->Right = new wavelet_tree(str, offset);
 			int count = 0;
 			while (true) {
@@ -411,26 +384,7 @@ public:
 
 		}
 		return;
-		//wavelet_tree wt;
-		/*
-		char ch;
-
-		fin >> ch;
-
-		cout << ch;
-			*/
-			/*
-			vector<People> people;
-		People temp;
-		while (fin >> temp.name >> temp.surname >> temp.years) {
-			people.push_back(temp);
-		}
-
-		// now print the information you read in
-		for (const auto& person : people) {
-			cout << person.name << ' ' << person.surname << ' ' << person.years << endl;
-		}
-		*/
+		
 	}
 
 	int rank(char c, int index) {
@@ -468,34 +422,13 @@ public:
 		if (this->B.size() < occurrence) return 0;
 		return occurrence;
 	}
-	/*
-
-		istream& operator>>(istream& is, Entry2& en)
-		{
-			is >> en.original;
-			is >> en.currency;
-			return is;
-		}
-
-		ostream& operator<<(ostream& os, const Entry2& en)
-		{
-			os << en.original << " " << en.currency;
-			return os;
-		}
-		*/
+	
+	
 };
 
 void wavelet_tree_dump(std::ostream& fout, const wavelet_tree* node) {
-	//while (node->Left != NULL && node->Right != NULL) {
-		/*
-		char middle;
-		wavelet_tree* Right;
-		wavelet_tree* Left;
-		wavelet_tree* Parent;
-		bit_vector B;
-		rank_support *r1;
-		select_support* s1;
-		*/
+	
+	
 	fout << "{";
 	fout << "alphabet:";
 	for (auto elem : node->alphabet)
@@ -517,23 +450,7 @@ void wavelet_tree_dump(std::ostream& fout, const wavelet_tree* node) {
 		wavelet_tree_dump(fout, node->Right);
 	}
 	fout << "}";
-	//}
-
-	/*
-	to << "{"<< to << "\"alphabet\":\"" << node->alphabet << "\"";
-	to << ',';
-	to << "\"middle\": \"" << node->middle << "\"";
-	if (nullptr != node->Left) {
-		to << ",\"Left\" : ";
-		wavelet_tree_to_stream(to, node->Left);
-	}
-	if (nullptr != node->Right) {
-		to << ",\"Right\" : ";
-		wavelet_tree_to_stream(to, node->Right);
-	}
-	to << "}";
-
-	*/
+	
 }
 
 wavelet_tree wavelet_tree_from_file(std::istream& fin) {
@@ -547,17 +464,6 @@ wavelet_tree wavelet_tree_from_file(std::istream& fin) {
 
 	return wavelet_tree(str, 0);
 
-	/*
-	vector<People> people;
-People temp;
-while (fin >> temp.name >> temp.surname >> temp.years) {
-	people.push_back(temp);
-}
-
-// now print the information you read in
-for (const auto& person : people) {
-	cout << person.name << ' ' << person.surname << ' ' << person.years << endl;
-}*/
 }
 
 int main(void) {
