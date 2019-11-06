@@ -599,10 +599,13 @@ int main(int argc, char** argv)
 		//$wt build <input string> <output file>
 		std::string input = argv[2];
         std::string Indices= argv[3];
-		std::string output = argv[4];
+		std::string Indices2= argv[4];
+		std::string output = argv[5];
 
 		ifstream infile (input);
-        ifstream queryindices (Indices);
+        ifstream rankqueryindices (Indices);
+		ifstream selectqueryindices (Indices2);
+		
         
 		ofstream outfile (output , std::ios_base::app | std::ios_base::out);
 		outfile.setf(ios::fixed,ios::floatfield);
@@ -620,19 +623,20 @@ int main(int argc, char** argv)
 			int b;
 			
 			
-            if (queryindices.is_open())
+            if (rankqueryindices.is_open() && selectqueryindices.is_open())
             {
                 //cout<<"a";
                 auto start = std::chrono::system_clock::now();
-                while (queryindices >> a>>b) wt.rank(a,b);
+                while (rankqueryindices >> a>>b) wt.rank(a,b);
 
 				
                 auto end = std::chrono::system_clock::now();
                 std::chrono::duration<double> elapsed_seconds = end-start;
-				queryindices.clear();
-				queryindices.seekg(0, ios::beg);
+				rankqueryindices.clear();
+				rankqueryindices.seekg(0, ios::beg);
+				
 				auto start2 = std::chrono::system_clock::now();
-                while (queryindices >> a>>b) wt.select(a,b);
+                while (rankqueryindices >> a>>b) wt.select(a,b);
                 auto end2 = std::chrono::system_clock::now();
                 std::chrono::duration<double> elapsed_seconds2 = end-start;
 				
