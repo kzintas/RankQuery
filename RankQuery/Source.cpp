@@ -389,7 +389,7 @@ public:
 
 	int rank(char c, int index) {
 		while (this->Left != NULL && this->Right != NULL) {
-			cout << index << "\n";
+			//cout << index << "\n";
 			if (c <= middle) {
 				index = this->r1->rank0(index);
 				return this->Left->rank(c, index);
@@ -422,7 +422,24 @@ public:
 		if (this->B.size() < occurrence) return 0;
 		return occurrence;
 	}
-	
+
+
+	char access(int index) {
+		while (alphabet.size()!=1) {
+			cout << index <<"\t"<<alphabet.size() <<"\n";
+			if (this->B.at(index)==0) {
+				index = this->r1->rank0(index);
+				return this->Left->access(index);
+			}
+
+			else {
+				index = this->r1->rank1(index);
+				return this->Right->access(index);
+			}
+		}
+		cout<<"Here"<<"\n";
+		return (int)*alphabet.begin();
+	}
 	
 };
 
@@ -515,7 +532,7 @@ int main(int argc, char** argv)
 			int a;
 			while (queryindices >> a)
 			{
-				cout<<a<<"\n";
+				cout<<wt1.access(a)<<"AA\n";
 				// process pair (a,b)
 			}
 		}
