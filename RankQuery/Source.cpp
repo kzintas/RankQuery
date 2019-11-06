@@ -157,6 +157,7 @@ public:
 		//: Returns the number of 1s in the underlying bit - vector up to position i(inclusive).
 
 		i -= 1;
+		if(i==0) return 0;
 		int superblock_index = floor(i / superblock_size);
 		int block_index = floor((i - superblock_index * superblock_size) / block_size);
 
@@ -325,7 +326,7 @@ public:
 			offset += 10;
 			while (str.at(offset) != ';') {
 				this->alphabet.insert(str.at(offset));
-				cout << str.at(offset);
+				//cout << str.at(offset);
 				offset += 2;
 			}
 			offset++;
@@ -335,12 +336,12 @@ public:
 			offset += 5;
 			while (str.at(offset) != ';') {
 				this->B.push_back(str.at(offset)=='1');
-				cout << str.at(offset);
+				//cout << str.at(offset);
 				offset++;
 			}
 			offset++;
 		}
-		cout << "\n";
+		//cout << "\n";
 		if (str.substr(offset, 7) == "middle:") {
 			offset += 7;
 			this->middle = str.at(offset);
@@ -425,19 +426,20 @@ public:
 
 
 	char access(int index) {
+		
 		while (alphabet.size()!=1) {
-			cout << index <<"\t"<<alphabet.size() <<"\n";
+			//cout << index <<"\t"<<alphabet.size() <<"\n";
 			if (this->B.at(index)==0) {
-				index = this->r1->rank0(index);
-				return this->Left->access(index);
+				index = this->r1->rank0(index+1);
+				return this->Left->access(index-1);
 			}
 
 			else {
-				index = this->r1->rank1(index);
-				return this->Right->access(index);
+				index = this->r1->rank1(index+1);
+				return this->Right->access(index-1);
 			}
 		}
-		cout<<"Here"<<"\n";
+		//cout<<"Here"<<"\n";
 		return (int)*alphabet.begin();
 	}
 	
@@ -477,7 +479,7 @@ wavelet_tree wavelet_tree_from_file(std::istream& fin) {
 	}
 	string str;
 	getline(fin, str);
-	cout << str << "\n\n";
+	//cout << str << "\n\n";
 
 	return wavelet_tree(str, 0);
 
@@ -532,7 +534,7 @@ int main(int argc, char** argv)
 			int a;
 			while (queryindices >> a)
 			{
-				cout<<wt1.access(a)<<"AA\n";
+				cout<<wt1.access(a)<<"\n";
 				// process pair (a,b)
 			}
 		}
