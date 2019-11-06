@@ -89,8 +89,9 @@ public:
 		R_s.push_back(0);	//First value will always be zero
 
 		//Superblock calculations
+		int sum = 0;
+			
 		for (int i = 0; i < (number_of_superblocks - 1); i++) {	//Loop over number of super blocks
-			int sum = 0;
 			for (int j = 0; (j < superblock_size && count < size); j++, count++) {	//Loop over the elements
 				sum += b[superblock_size * i + j];
 		
@@ -116,7 +117,7 @@ public:
 					scount++;
 				}
 				
-							}
+			}
 		}
 
 	
@@ -155,9 +156,10 @@ public:
 
 	uint64_t rank1(uint64_t i) {
 		//: Returns the number of 1s in the underlying bit - vector up to position i(inclusive).
-
+		if(i<=0) return 0;
+		
 		i -= 1;
-		if(i==0) return 0;
+		//if(i==0) return 0;
 		int superblock_index = floor(i / superblock_size);
 		int block_index = floor((i - superblock_index * superblock_size) / block_size);
 
@@ -175,6 +177,10 @@ public:
 		vector<bool> newVec(first, last);
 		
 		
+		while(block_end<(block_start+block_size)){
+			newVec.push_back(false);
+			block_end++;
+		}
 		i = accumulate(newVec.begin(), newVec.end(), 0, [](int x, int y) { return (x << 1) + y; });
 
 		//OPTION-1 Use STRING
@@ -193,7 +199,7 @@ public:
 	
 	uint64_t rank0(uint64_t i) {
 		//: Returns the number of 0s in the underlying bit - vector up to position i(inclusive) � simply i - rank1(i).
-
+		if(i==0) return 0;
 		return i - rank1(i);
 	}
 	
