@@ -16,3 +16,4 @@ Your final implementation should be a command-line program with the following in
 
     $wt select <saved wt> <access indices>
 
+Writeup: For this programming task, test your implementation by invoking it for bit vectors of various sizes, and plotting the bit-vector size (say N) versus the time requried to do some fixed number of select operations. Also, plot the bit-vector size (say N) versus the result of calling the overhead() function. Does your implementation match the expected theoretical bounds? If you feel ambitious, you can additionally implement a constant-time bit-vector select, though this is not required.
