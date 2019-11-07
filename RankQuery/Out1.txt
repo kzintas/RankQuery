@@ -1,0 +1,1 @@
+{alphabet:e,h,l,o,;bits:001110011100111;middle:j;Left:,{alphabet:e,h,;bits:101010;middle:f;Left:,{alphabet:e,;bits:000;middle:e;}Right:,{alphabet:h,;bits:000;middle:h;}}Right:,{alphabet:l,o,;bits:001001001;middle:m;Left:,{alphabet:l,;bits:000000;middle:l;}Right:,{alphabet:o,;bits:000;middle:o;}}}

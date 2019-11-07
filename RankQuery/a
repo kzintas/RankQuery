@@ -1,0 +1,3 @@
+outfile<<b.size()<<",";
+				outfile<< std::fixed << std::setprecision(3)<< elapsed_seconds.count()<<",";
+				outfile<<r1.overhead()<<"\n";

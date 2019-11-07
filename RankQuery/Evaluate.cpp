@@ -207,7 +207,7 @@ public:
 	uint64_t overhead() {
 		//: Returns the size of the rank data structure(in bits) that is required to support constant - time rank on the current bitvector.
 
-		int size = sizeof(b) * b.size() + sizeof(R_s) * R_s.size() * 8 + sizeof(R_b) * R_b.size() * 8 + sizeof(R_p) * 8 + pow(2.0, block_size) * block_size * sizeof(int) * 8;
+		int size = sizeof(R_s) * R_s.size() * 8 + sizeof(R_b) * R_b.size() * 8 + sizeof(R_p) * 8 + pow(2.0, block_size) * block_size * sizeof(int) * 8;
 		cout << "\n" << size << "\n";
 		cout << sizeof(b) << "\t" << sizeof(R_b) << "\t" << sizeof(R_s);
 		return size;
@@ -504,11 +504,11 @@ int main(int argc, char** argv)
 	if(arg=="rank") {
 		//$wt build <input string> <output file>
 		std::string input = argv[2];
-        std::string Indices= argv[3];
-		std::string output = argv[4];
+        //std::string Indices= argv[3];
+		std::string output = argv[3];
 
 		ifstream infile (input);
-        ifstream queryindices (Indices);
+        //ifstream queryindices (Indices);
         
 		ofstream outfile (output , std::ios_base::app | std::ios_base::out);
 		outfile.setf(ios::fixed,ios::floatfield);
@@ -530,6 +530,7 @@ int main(int argc, char** argv)
 
             int a;
            // cout<<"Hello";
+		   /*
 
             if (queryindices.is_open())
             {
@@ -540,7 +541,8 @@ int main(int argc, char** argv)
                 std::chrono::duration<double> elapsed_seconds = end-start;
                 outfile<<b.size()<<","<<elapsed_seconds.count()<<","<<r1.overhead()<<"\n";
             }
-            else cout << "Unable to open file";
+			*/
+			outfile<<b.size()<<","<<r1.overhead()<<"\n";
 
             outfile.close();
         }
